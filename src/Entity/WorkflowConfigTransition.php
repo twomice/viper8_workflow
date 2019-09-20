@@ -86,10 +86,21 @@ class WorkflowConfigTransition extends ConfigEntityBase implements WorkflowConfi
    * @param $to_sid
    */
   public function setValues($from_sid, $to_sid) {
+    // @todo : unused parameters. Remove the method/parameters?
     $state = WorkflowState::load($this->to_sid ? $this->to_sid : $this->from_sid);
     if($state) {
       $this->setWorkflow($state->getWorkflow());
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function calculateDependencies() {
+    parent::calculateDependencies();
+    $this->addDependency('config', $this->getFromState()->getConfigDependencyName());
+    $this->addDependency('config', $this->getToState()->getConfigDependencyName());
+    return $this;
   }
 
   /**

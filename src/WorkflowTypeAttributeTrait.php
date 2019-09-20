@@ -34,7 +34,7 @@ trait WorkflowTypeAttributeTrait {
   /**
    * @param Workflow $workflow
    */
-  public function setWorkflow(Workflow $workflow) {
+  public function setWorkflow(Workflow $workflow = NULL) {
     $this->wid = '';
     $this->workflow = NULL;
     if ($workflow) {
@@ -64,6 +64,7 @@ trait WorkflowTypeAttributeTrait {
   /**
    * Sets the Workflow ID of this object.
    *
+   * @param $wid Workflow ID
    * @return object
    */
   public function setWorkflowId($wid) {

@@ -128,6 +128,19 @@ class WorkflowState extends ConfigEntityBase {
   /**
    * {@inheritdoc}
    */
+  public function calculateDependencies() {
+    parent::calculateDependencies();
+    // We cannot use $this->getWorkflow()->getConfigDependencyName() because
+    // calling $this->getWorkflow() here causes an infinite loop.
+    /** @var \Drupal\Core\Config\Entity\ConfigEntityTypeInterface $workflow_type */
+    $workflow_type = \Drupal::entityTypeManager()->getDefinition('workflow_type');
+    $this->addDependency('config', $workflow_type->getConfigPrefix() . '.' . $this->getWorkflowId());
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function save($create_creation_state = TRUE) {
     // Create the machine_name for new states.
     // N.B.: Keep machine_name in WorkflowState and ~ListBuilder aligned.
@@ -179,7 +192,7 @@ class WorkflowState extends ConfigEntityBase {
     $states = parent::loadMultiple();
     usort($states, ['Drupal\workflow\Entity\WorkflowState', 'sort'] );
 
-    // Filter onl Wid, if requested, E.g., by Workflow->getStates().
+    // Filter on Wid, if requested, E.g., by Workflow->getStates().
     // Set the ID as array key.
     $result = [];
     foreach ($states as $state) {

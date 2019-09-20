@@ -92,6 +92,13 @@ class Workflow extends ConfigEntityBase implements WorkflowInterface {
   protected $module = 'workflow';
 
   /**
+   * {@inheritdoc}
+   */
+  public function calculateDependencies() {
+    parent::calculateDependencies();
+  }
+
+  /**
    * CRUD functions.
    */
 
@@ -142,7 +149,7 @@ class Workflow extends ConfigEntityBase implements WorkflowInterface {
    */
   public function delete() {
     if (!$this->isDeletable()) {
-      $message = t('Workflow %workflow is not Deletable. Please delete the field where this workflow type is reffered',
+      $message = t('Workflow %workflow is not Deletable. Please delete the field where this workflow type is referred',
         ['%workflow' => $this->label()]);
       drupal_set_message($message, 'error');
       return;
